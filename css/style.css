@@ -1,0 +1,589 @@
+/* ============================================================
+   Todo Life Dashboard — Main Stylesheet
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   1. Reset & Box-Sizing
+   ------------------------------------------------------------ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ------------------------------------------------------------
+   2. Design Tokens (CSS Custom Properties)
+   ------------------------------------------------------------ */
+:root {
+  /* Colour palette — dark theme */
+  --color-bg:           #0f1117;
+  --color-surface:      #1a1d27;
+  --color-surface-alt:  #22263a;
+  --color-border:       #2e3250;
+  --color-accent:       #6c8ef5;
+  --color-accent-hover: #8aa4ff;
+  --color-danger:       #e05c5c;
+  --color-danger-hover: #f07070;
+  --color-success:      #4caf7d;
+  --color-text:         #e2e6f0;
+  --color-text-muted:   #8890aa;
+  --color-text-faint:   #555d7a;
+  --color-disabled-bg:  #2a2e42;
+  --color-disabled-text:#555d7a;
+
+  /* Typography */
+  --font-sans:  system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-mono:  "SF Mono", "Fira Code", "Cascadia Code", Consolas, "Courier New", monospace;
+
+  /* Spacing */
+  --space-xs:  0.25rem;
+  --space-sm:  0.5rem;
+  --space-md:  1rem;
+  --space-lg:  1.5rem;
+  --space-xl:  2rem;
+
+  /* Radii */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+
+  /* Touch target minimum */
+  --touch-min: 44px;
+}
+
+/* ------------------------------------------------------------
+   3. Base / Body
+   ------------------------------------------------------------ */
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  line-height: 1.5;
+  min-height: 100vh;
+  margin: 0;
+}
+
+/* ------------------------------------------------------------
+   4. App Container — Mobile-first (single column)
+   ------------------------------------------------------------ */
+#app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ------------------------------------------------------------
+   5. Responsive Layouts
+   ------------------------------------------------------------ */
+
+/* Tablet / intermediate: two columns, natural height */
+@media (min-width: 768px) and (max-width: 1023px) {
+  #app {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    min-height: 100vh;
+  }
+}
+
+/* Desktop: 2×2 fixed-viewport grid */
+@media (min-width: 1024px) {
+  #app {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    height: 100vh;
+    overflow: hidden;
+  }
+}
+
+/* Mobile: explicit stacked column */
+@media (max-width: 767px) {
+  #app {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+/* ------------------------------------------------------------
+   6. Widget Sections (shared)
+   ------------------------------------------------------------ */
+#app > section {
+  padding: var(--space-xl);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+/* Subtle inner shadow to separate cells visually */
+#app > section:nth-child(odd) {
+  background-color: var(--color-surface);
+}
+
+#app > section:nth-child(even) {
+  background-color: var(--color-surface-alt);
+}
+
+/* Mobile: give each widget a comfortable minimum height */
+@media (max-width: 767px) {
+  #app > section {
+    min-height: 220px;
+    padding: var(--space-lg);
+  }
+}
+
+/* ------------------------------------------------------------
+   7. Greeting Widget
+   ------------------------------------------------------------ */
+#greeting-widget {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+/* Greeting — largest element */
+#greeting {
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  font-weight: 700;
+  color: var(--color-accent);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+/* Clock — secondary */
+#clock {
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: var(--color-text);
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
+
+/* Date — tertiary */
+#date {
+  font-size: clamp(0.875rem, 1.5vw, 1.1rem);
+  color: var(--color-text-muted);
+  font-weight: 400;
+}
+
+/* ------------------------------------------------------------
+   8. Timer Widget
+   ------------------------------------------------------------ */
+#timer-widget {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+#timer-display {
+  font-size: clamp(3rem, 6vw, 5rem);
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--color-text);
+  letter-spacing: 0.06em;
+  line-height: 1;
+  padding: var(--space-md) 0;
+}
+
+#timer-controls {
+  display: flex;
+  gap: var(--space-sm);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+#timer-controls button {
+  min-width: 80px;
+  min-height: var(--touch-min);
+  padding: var(--space-sm) var(--space-lg);
+  font-size: 0.95rem;
+  font-weight: 600;
+  font-family: var(--font-sans);
+  border: 2px solid transparent;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
+}
+
+/* Start button */
+#btn-start {
+  background-color: var(--color-accent);
+  color: #fff;
+  border-color: var(--color-accent);
+}
+
+#btn-start:hover:not(:disabled) {
+  background-color: var(--color-accent-hover);
+  border-color: var(--color-accent-hover);
+}
+
+/* Stop button */
+#btn-stop {
+  background-color: transparent;
+  color: var(--color-danger);
+  border-color: var(--color-danger);
+}
+
+#btn-stop:hover:not(:disabled) {
+  background-color: var(--color-danger);
+  color: #fff;
+}
+
+/* Reset button */
+#btn-reset {
+  background-color: transparent;
+  color: var(--color-text-muted);
+  border-color: var(--color-border);
+}
+
+#btn-reset:hover:not(:disabled) {
+  border-color: var(--color-text-muted);
+  color: var(--color-text);
+}
+
+/* Disabled state — shared across all timer buttons */
+#timer-controls button:disabled {
+  background-color: var(--color-disabled-bg);
+  color: var(--color-disabled-text);
+  border-color: var(--color-disabled-bg);
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+/* ------------------------------------------------------------
+   9. Task Widget
+   ------------------------------------------------------------ */
+#task-widget {
+  /* column flex already set by section base */
+}
+
+/* Input row */
+#task-input-row {
+  display: flex;
+  gap: var(--space-sm);
+  align-items: stretch;
+}
+
+#task-input {
+  flex: 1;
+  min-height: var(--touch-min);
+  padding: var(--space-sm) var(--space-md);
+  font-size: 0.95rem;
+  font-family: var(--font-sans);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+#task-input:focus {
+  border-color: var(--color-accent);
+}
+
+#task-input.error {
+  border-color: var(--color-danger);
+}
+
+#btn-add-task {
+  min-height: var(--touch-min);
+  padding: var(--space-sm) var(--space-lg);
+  font-size: 0.95rem;
+  font-weight: 600;
+  font-family: var(--font-sans);
+  background-color: var(--color-accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.15s ease;
+}
+
+#btn-add-task:hover {
+  background-color: var(--color-accent-hover);
+}
+
+/* Task list */
+#task-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  overflow-y: auto;
+  flex: 1;
+}
+
+#task-list li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  min-height: var(--touch-min);
+  transition: border-color 0.15s ease;
+}
+
+#task-list li:hover {
+  border-color: var(--color-text-faint);
+}
+
+/* Checkbox */
+#task-list li input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  min-width: 18px;
+  accent-color: var(--color-accent);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* Task title span */
+#task-list li span {
+  flex: 1;
+  font-size: 0.95rem;
+  color: var(--color-text);
+  word-break: break-word;
+  transition: color 0.15s ease, opacity 0.15s ease;
+}
+
+/* Completed task title */
+#task-list li span.completed {
+  text-decoration: line-through;
+  opacity: 0.45;
+  color: var(--color-text-muted);
+}
+
+/* Inline edit input */
+#task-list li input[type="text"] {
+  flex: 1;
+  min-height: 36px;
+  padding: var(--space-xs) var(--space-sm);
+  font-size: 0.95rem;
+  font-family: var(--font-sans);
+  background-color: var(--color-surface-alt);
+  color: var(--color-text);
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-sm);
+  outline: none;
+}
+
+/* Task action buttons (Edit / Delete) */
+#task-list li button {
+  min-width: 36px;
+  min-height: 36px;
+  padding: var(--space-xs) var(--space-sm);
+  font-size: 0.8rem;
+  font-family: var(--font-sans);
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+/* Edit button */
+#task-list li button.btn-edit {
+  background-color: transparent;
+  color: var(--color-text-muted);
+  border-color: var(--color-border);
+}
+
+#task-list li button.btn-edit:hover {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+/* Delete button */
+#task-list li button.btn-delete {
+  background-color: transparent;
+  color: var(--color-text-faint);
+  border-color: var(--color-border);
+}
+
+#task-list li button.btn-delete:hover {
+  color: var(--color-danger);
+  border-color: var(--color-danger);
+}
+
+/* ------------------------------------------------------------
+   10. Links Widget
+   ------------------------------------------------------------ */
+#links-widget {
+  /* column flex already set by section base */
+}
+
+/* Input row */
+#link-input-row {
+  display: flex;
+  gap: var(--space-sm);
+  align-items: stretch;
+  flex-wrap: wrap;
+}
+
+#link-label-input,
+#link-url-input {
+  flex: 1;
+  min-width: 100px;
+  min-height: var(--touch-min);
+  padding: var(--space-sm) var(--space-md);
+  font-size: 0.95rem;
+  font-family: var(--font-sans);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+#link-label-input:focus,
+#link-url-input:focus {
+  border-color: var(--color-accent);
+}
+
+#link-label-input.error,
+#link-url-input.error {
+  border-color: var(--color-danger);
+}
+
+#btn-add-link {
+  min-height: var(--touch-min);
+  padding: var(--space-sm) var(--space-lg);
+  font-size: 0.95rem;
+  font-weight: 600;
+  font-family: var(--font-sans);
+  background-color: var(--color-accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.15s ease;
+}
+
+#btn-add-link:hover {
+  background-color: var(--color-accent-hover);
+}
+
+/* Links list */
+#links-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* Each link row wrapper */
+#links-list > div {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-xs) var(--space-sm);
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  min-height: var(--touch-min);
+  transition: border-color 0.15s ease;
+}
+
+#links-list > div:hover {
+  border-color: var(--color-text-faint);
+}
+
+/* Link anchor styled as a button */
+#links-list a {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  min-height: 36px;
+  padding: var(--space-xs) var(--space-md);
+  font-size: 0.9rem;
+  font-weight: 500;
+  font-family: var(--font-sans);
+  color: var(--color-accent);
+  background-color: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  word-break: break-all;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+#links-list a:hover {
+  background-color: var(--color-accent);
+  color: #fff;
+  border-color: var(--color-accent);
+}
+
+/* Delete button for links */
+#links-list button.btn-delete {
+  min-width: 36px;
+  min-height: 36px;
+  padding: var(--space-xs) var(--space-sm);
+  font-size: 0.8rem;
+  font-family: var(--font-sans);
+  background-color: transparent;
+  color: var(--color-text-faint);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+#links-list button.btn-delete:hover {
+  color: var(--color-danger);
+  border-color: var(--color-danger);
+}
+
+/* ------------------------------------------------------------
+   11. Shared Input / Button Accessibility Baseline
+   ------------------------------------------------------------ */
+
+/* Visible focus ring for keyboard navigation */
+button:focus-visible,
+input:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Placeholder text */
+::placeholder {
+  color: var(--color-text-faint);
+  opacity: 1;
+}
+
+/* Scrollbar styling (Webkit) */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--color-border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-text-faint);
+}

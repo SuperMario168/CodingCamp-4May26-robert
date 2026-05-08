@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Todo Life Dashboard</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="js/app.js" defer></script>
+  </head>
+  <body>
+    <div id="app">
+      <section id="greeting-widget">
+        <h1 id="greeting"></h1>
+        <p id="clock"></p>
+        <p id="date"></p>
+      </section>
+
+      <section id="timer-widget">
+        <div id="timer-display">25:00</div>
+        <div id="timer-controls">
+          <button id="btn-start">Start</button>
+          <button id="btn-stop" disabled>Stop</button>
+          <button id="btn-reset">Reset</button>
+        </div>
+      </section>
+
+      <section id="task-widget">
+        <div id="task-input-row">
+          <input id="task-input" type="text" placeholder="Add a task…" />
+          <button id="btn-add-task">Add</button>
+        </div>
+        <ul id="task-list"></ul>
+      </section>
+
+      <section id="links-widget">
+        <div id="link-input-row">
+          <input id="link-label-input" type="text" placeholder="Label" />
+          <input id="link-url-input" type="url" placeholder="https://…" />
+          <button id="btn-add-link">Add</button>
+        </div>
+        <div id="links-list"></div>
+      </section>
+    </div>
+  </body>
+</html>
